@@ -2,9 +2,8 @@ package Tests;
 
 import Pages.InstagramFolowPage;
 import Pages.InstagramHomePage;
+import Pages.InstagramMyProfilePage;
 import Pages.InstagrammLoginPage;
-import com.codeborne.selenide.Selenide;
-import org.openqa.selenium.By;
 import org.testng.annotations.DataProvider;
 import org.testng.annotations.Test;
 
@@ -15,9 +14,13 @@ import static com.codeborne.selenide.Selenide.*;
  */
 public class InstagramTest {
 
-    InstagrammLoginPage instagrammLoginPage = page(InstagrammLoginPage.class);
-    InstagramHomePage instagramHomePage = page(InstagramHomePage.class);
-    InstagramFolowPage instagramFolowPage = page(InstagramFolowPage.class);
+    private InstagrammLoginPage loginPage = page(InstagrammLoginPage.class);
+
+    private InstagramHomePage homePage = page(InstagramHomePage.class);
+
+    private InstagramFolowPage folowPage = page(InstagramFolowPage.class);
+
+    private InstagramMyProfilePage myProfilePage = page(InstagramMyProfilePage.class);
 
     @DataProvider(name = "credentials")
     public static Object[][] values() {
@@ -25,14 +28,24 @@ public class InstagramTest {
     }
 
     @Test(dataProvider = "credentials")
-    public void userCanLoginByUsername(final String name, final String password) {
-        instagrammLoginPage.openInstagramHomePageWithCredentials(name,password);
+    public void followSomeBlogs(final String name, final String password) {
+        loginPage.openInstagramHomePageWithCredentials(name, password);
         sleep(1000);
-        instagramHomePage.openFirstFollowInTheWall();
-        instagramFolowPage.openfollowers();
+        homePage.openFirstFollowInTheWall();
+        folowPage.openfollowers();
         sleep(1000);
-        instagramFolowPage.addNewFollowers(100);
-        Selenide.sleep(5000);
+        folowPage.addNewFollowers(100);
     }
+
+    @Test(dataProvider = "credentials")
+    public void unFollowSomeBlogs(final String name, final String password) {
+        loginPage.openInstagramHomePageWithCredentials(name, password);
+        sleep(1000);
+        homePage.openMyProfile();
+        myProfilePage.openfollowers();
+        sleep(1000);
+        myProfilePage.dellNewFollowersFast(20);
+    }
+
 
 }

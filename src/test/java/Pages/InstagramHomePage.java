@@ -19,9 +19,25 @@ public class InstagramHomePage {
     @FindBys({@FindBy(how = How.CLASS_NAME, using = "_a012k")})
     private List<SelenideElement> follows;
 
+    @FindBy(css = "div.coreSpriteMobileNavProfileInactive")
+    private SelenideElement myProfile;
+
 
     public void openFirstFollowInTheWall() {
         follows.get(0).click();
+    }
+
+    public void openMyProfile(){
+        myProfile.click();
+    }
+
+    public void WaitForAjax1(int sleepTime) {
+        while (true) {
+            if ((Boolean) Selenide.executeJavaScript("return jQuery.active == 0")) {
+                break;
+            }
+            Selenide.sleep(sleepTime);
+        }
     }
 
     private void scrollToElement(SelenideElement element){
